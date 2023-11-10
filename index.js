@@ -87,44 +87,99 @@ var finances = [
   ["Feb-2017", 671099],
 ];
 
+// Stored Answers
 var totalMonths = finances.length;
 var totalProf = totalProfit(finances);
-var averageDifferenceM = totalProf / finances.length;
+var averageDifferenceM = monthlyChange(finances).toFixed(2);
+var biggestIncrease = greatestIncrease(finances);
+var biggestDecrease = greatestDecrease(finances);
 
-
-var allChanges = monthlChange(finances);
-
-console.log(totalMonths, totalProf, averageDifferenceM);
-
+console.log(
+  "Financial Analysis" +
+    "\n" +
+    "----------------" +
+    "\n" +
+    "Total Months: " +
+    totalMonths +
+    "\n" +
+    "Total: " +
+    totalProf +
+    "\n" +
+    "Average Change: " +
+    averageDifferenceM +
+    "\n" +
+    "Greatest Increase in Profits/Losses: " +
+    biggestIncrease +
+    "\n" +
+    "Greatest Decrease in Profits/Losses: " +
+    biggestDecrease
+);
 
 // Calculate Total Profit
 function totalProfit(finances) {
   var difference = 0;
-  
 
-  for (i = 0; i < finances.length - 1; i++) {
-    
-    difference += (finances[i][1] + finances[i + 1][1]);
-    //console.log(monthlyDif, difference, i);
+  for (i = 0; i < finances.length; i++) {
+    difference += finances[i][1];
+    //console.log(i, difference, finances[i][1]);
   }
 
-  console.log(difference);
+  //console.log(difference);
   return difference;
 }
 
+// Calculate Monthly Change
+function monthlyChange(arr) {
+  var totalChange = 0;
+  var result;
 
-//Calculate Monthly Change
-function monthlChange(finances) {
-  var monthlyDif = [];
+  for (i = 0; i < arr.length - 1; i++) {
+    totalChange += arr[i + 1][1] - arr[i][1];
 
-  for (i = 0; i < finances.length - 1; i++) {
-
-    monthlyDif[i] = finances[i][1] + finances[i + 1][1];
-    
+    //console.log(i, totalChange, arr[i], arr[i + 1]);
   }
-
-  console.log(monthlyDif);
-  return monthlyDif;
+  return (result = totalChange / (arr.length - 1));
 }
 
-monthlChange(finances);
+// Caculate Greatest Increase
+function greatestIncrease(arr) {
+  var currentDiff;
+  var highestDiff = 0;
+  var result = [];
+
+  for (i = 0; i < arr.length - 1; i++) {
+    //console.log(i, arr[i][1], arr[i + 1][1]);
+    currentDiff = arr[i + 1][1] - arr[i][1];
+    //console.log(currentDiff);
+
+    if (currentDiff > highestDiff || highestDiff == 0) {
+      highestDiff = currentDiff;
+      result[0] = arr[i + 1][0];
+      result[1] = highestDiff;
+      //console.log(currentDiff, highestDiff, result);
+    }
+  }
+
+  return result;
+}
+
+// Calculate Greatest Decrease
+function greatestDecrease(arr) {
+  var currentDiff;
+  var highestDiff = Infinity;
+  var result = [];
+
+  for (i = 0; i < arr.length - 1; i++) {
+    currentDiff = arr[i + 1][1] - arr[i][1];
+    //console.log(currentDiff, arr[i + 1][0]);
+
+    if (currentDiff < highestDiff || highestDiff == Infinity) {
+      highestDiff = currentDiff;
+      result[0] = arr[i + 1][0];
+      result[1] = highestDiff;
+      //console.log(currentDiff, highestDiff, result);
+    }
+  }
+
+  return result;
+}
